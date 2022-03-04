@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myoa.smbusoa.dao.SmbusUserDao">
+  <resultMap id="BaseResultMap" type="com.myoa.entityoa.smbusoa.pojo.SmbusUser">
+    <id column="smbus_user_ID" jdbcType="INTEGER" property="id" />
+    <result column="smbus_user_NAME" jdbcType="VARCHAR" property="name" />
+    <result column="smbus_user_PASSWORD" jdbcType="VARCHAR" property="password" />
+    <result column="smbus_user_SECURITY_CODE" jdbcType="VARCHAR" property="securityCode"/>
+    <result column="smbus_user_ID_CARD" jdbcType="VARCHAR" property="idCard" />
+    <result column="smbus_user_SEX" jdbcType="CHAR" property="sex" />
+    <result column="smbus_user_PHONE" jdbcType="VARCHAR" property="phone" />
+    <result column="smbus_user_ENTRY_TIME" jdbcType="TIMESTAMP" property="entryTime" />
+    <result column="smbus_user_EMAIL" jdbcType="VARCHAR" property="email" />
+    <result column="smbus_user_ROLE_ID" jdbcType="INTEGER" property="roleId" />
+    <result column="smbus_user_JOB_ID" jdbcType="INTEGER" property="jobId" />
+    <result column="smbus_user_ORG_ID" jdbcType="INTEGER" property="orgId" />
+    <result column="smbus_user_STATUS" jdbcType="CHAR" property="status" />
+    <result column="smbus_user_ADD_TIME" jdbcType="TIMESTAMP" property="addTime" />
+    <result column="smbus_user_ADD_USER" jdbcType="INTEGER" property="addUser" />
+    <result column="smbus_user_UPDATED_TIME" jdbcType="TIMESTAMP" property="updatedTime" />
+    <result column="smbus_user_UPDATED_USER" jdbcType="INTEGER" property="updatedUser" />
+    <result column="smbus_user_DESCRIPTION" jdbcType="VARCHAR" property="description"/>
+    <association property="smbusJob"
+                 column="{id=smbus_user_JOB_ID}"
+                 javaType="com.myoa.entityoa.smbusoa.pojo.SmbusJob"
+                 select="com.myoa.smbusoa.dao.SmbusJobDao.selectByPrimaryKey"/>
+    <association property="smbusOrg"
+                 javaType="com.myoa.entityoa.smbusoa.pojo.SmbusOrg"
+                 column="{id=smbus_user_ORG_ID}"
+                 select="com.myoa.smbusoa.dao.SmbusOrgDao.selectByPrimaryKey"/>
+    <association property="smbusRole"
+                 javaType="com.myoa.entityoa.smbusoa.pojo.SmbusRole"
+                 column="{id=smbus_user_ROLE_ID}"
+                 select="com.myoa.smbusoa.dao.SmbusRoleDao.selectByPrimaryKey"/>
+  </resultMap>
+  <sql id="Base_Column_List">
+    smbus_user.ID as smbus_user_ID, smbus_user.`NAME` as `smbus_user_NAME`, smbus_user.`PASSWORD` as `smbus_user_PASSWORD`, smbus_user.`SECURITY_CODE` AS smbus_user_SECURITY_CODE,
+    smbus_user.ID_CARD as smbus_user_ID_CARD, smbus_user.SEX as smbus_user_SEX, smbus_user.PHONE as smbus_user_PHONE, 
+    smbus_user.ENTRY_TIME as smbus_user_ENTRY_TIME, smbus_user.EMAIL as smbus_user_EMAIL, 
+    smbus_user.ROLE_ID as smbus_user_ROLE_ID, smbus_user.JOB_ID as smbus_user_JOB_ID, 
+    smbus_user.ORG_ID as smbus_user_ORG_ID, smbus_user.`STATUS` as `smbus_user_STATUS`, 
+    smbus_user.ADD_TIME as smbus_user_ADD_TIME, smbus_user.ADD_USER as smbus_user_ADD_USER, 
+    smbus_user.UPDATED_TIME as smbus_user_UPDATED_TIME, smbus_user.UPDATED_USER as smbus_user_UPDATED_USER,
+    smbus_user.DESCRIPTION AS smbus_user_DESCRIPTION
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from smbus_user smbus_user
+    where smbus_user.ID = #{id,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectByName" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"/>
+    from smbus_user smbus_user
+    where smbus_user.name=#{name}
+  </select>
+
+  <delete id="deleteByPrimaryKey">
+    delete from smbus_user
+    where ID = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="ID" keyProperty="id" parameterType="com.myoa.entityoa.smbusoa.pojo.SmbusUser" useGeneratedKeys="true">
+    insert into smbus_user (`NAME`, `PASSWORD`, SECURITY_CODE, ID_CARD,
+      SEX, PHONE, ENTRY_TIME, 
+      EMAIL, ROLE_ID, JOB_ID, 
+      ORG_ID, `STATUS`, ADD_TIME, 
+      ADD_USER, UPDATED_TIME, UPDATED_USER,DESCRIPTION
+      )
+    values (#{name,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{securityCode}, #{idCard,jdbcType=VARCHAR},
+      #{sex,jdbcType=CHAR}, #{phone,jdbcType=VARCHAR}, #{entryTime,jdbcType=TIMESTAMP}, 
+      #{email,jdbcType=VARCHAR}, #{roleId,jdbcType=INTEGER}, #{jobId,jdbcType=INTEGER}, 
+      #{orgId,jdbcType=INTEGER}, #{status,jdbcType=CHAR}, #{addTime,jdbcType=TIMESTAMP}, 
+      #{addUser,jdbcType=INTEGER}, #{updatedTime,jdbcType=TIMESTAMP}, #{updatedUser,jdbcType=INTEGER},
+      #{description}
+      )
+  </insert>
+  <insert id="insertSelective" keyColumn="ID" keyProperty="id" parameterType="com.myoa.entityoa.smbusoa.pojo.SmbusUser" useGeneratedKeys="true">
+    insert into smbus_user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        `NAME`,
+      </if>
+      <if test="password != null">
+        `PASSWORD`,
+      </if>
+      <if test="securityCode != null">
+        SECURITY_CODE,
+      </if>
+      <if test="idCard != null">
+        ID_CARD,
+      </if>
+      <if test="sex != null">
+        SEX,
+      </if>
+      <if test="phone != null">
+        PHONE,
+      </if>
+      <if test="entryTime != null">
+        ENTRY_TIME,
+      </if>
+      <if test="email != null">
+        EMAIL,
+      </if>
+      <if test="roleId != null">
+        ROLE_ID,
+      </if>
+      <if test="jobId != null">
+        JOB_ID,
+      </if>
+      <if test="orgId != null">
+        ORG_ID,
+      </if>
+      <if test="status != null">
+        `STATUS`,
+      </if>
+      <if test="addTime != null">
+        ADD_TIME,
+      </if>
+      <if test="addUser != null">
+        ADD_USER,
+      </if>
+      <if test="updatedTime != null">
+        UPDATED_TIME,
+      </if>
+      <if test="updatedUser != null">
+        UPDATED_USER,
+      </if>
+      <if test="description != null">
+        DESCRIPTION,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="securityCode != null">
+        #{securityCode},
+      </if>
+      <if test="idCard != null">
+        #{idCard,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        #{sex,jdbcType=CHAR},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="entryTime != null">
+        #{entryTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="roleId != null">
+        #{roleId,jdbcType=INTEGER},
+      </if>
+      <if test="jobId != null">
+        #{jobId,jdbcType=INTEGER},
+      </if>
+      <if test="orgId != null">
+        #{orgId,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=CHAR},
+      </if>
+      <if test="addTime != null">
+        #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="addUser != null">
+        #{addUser,jdbcType=INTEGER},
+      </if>
+      <if test="updatedTime != null">
+        #{updatedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedUser != null">
+        #{updatedUser,jdbcType=INTEGER},
+      </if>
+      <if test="description != null">
+        #{description},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.myoa.entityoa.smbusoa.pojo.SmbusUser">
+    update smbus_user
+    <set>
+      <if test="name != null">
+        `NAME` = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        `PASSWORD` = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="securityCode != null">
+        SECURITY_CODE = #{securityCode},
+      </if>
+      <if test="idCard != null">
+        ID_CARD = #{idCard,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        SEX = #{sex,jdbcType=CHAR},
+      </if>
+      <if test="phone != null">
+        PHONE = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="entryTime != null">
+        ENTRY_TIME = #{entryTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="email != null">
+        EMAIL = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="roleId != null">
+        ROLE_ID = #{roleId,jdbcType=INTEGER},
+      </if>
+      <if test="jobId != null">
+        JOB_ID = #{jobId,jdbcType=INTEGER},
+      </if>
+      <if test="orgId != null">
+        ORG_ID = #{orgId,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        `STATUS` = #{status,jdbcType=CHAR},
+      </if>
+      <if test="addTime != null">
+        ADD_TIME = #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="addUser != null">
+        ADD_USER = #{addUser,jdbcType=INTEGER},
+      </if>
+      <if test="updatedTime != null">
+        UPDATED_TIME = #{updatedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedUser != null">
+        UPDATED_USER = #{updatedUser,jdbcType=INTEGER},
+      </if>
+      <if test="description != null">
+        DESCRIPTION = #{description},
+      </if>
+      <if test="securityCode != null">
+        SECURITY_CODE = #{securityCode},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.myoa.entityoa.smbusoa.pojo.SmbusUser">
+    update smbus_user
+    set `NAME` = #{name,jdbcType=VARCHAR},
+      `PASSWORD` = #{password,jdbcType=VARCHAR},
+      SECURITY_CODE = #{securityCode},
+      ID_CARD = #{idCard,jdbcType=VARCHAR},
+      SEX = #{sex,jdbcType=CHAR},
+      PHONE = #{phone,jdbcType=VARCHAR},
+      ENTRY_TIME = #{entryTime,jdbcType=TIMESTAMP},
+      EMAIL = #{email,jdbcType=VARCHAR},
+      ROLE_ID = #{roleId,jdbcType=INTEGER},
+      JOB_ID = #{jobId,jdbcType=INTEGER},
+      ORG_ID = #{orgId,jdbcType=INTEGER},
+      `STATUS` = #{status,jdbcType=CHAR},
+      ADD_TIME = #{addTime,jdbcType=TIMESTAMP},
+      ADD_USER = #{addUser,jdbcType=INTEGER},
+      UPDATED_TIME = #{updatedTime,jdbcType=TIMESTAMP},
+      UPDATED_USER = #{updatedUser,jdbcType=INTEGER},
+      DESCRIPTION = #{description}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectUserAllList" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from smbus_user smbus_user
+  </select>
+
+  <select id="selectUserList" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from smbus_user smbus_user
+    where
+      1=1
+      <if test="name!=null and name!=''">and name like concat('%',#{name},'%')</if>
+  </select>
+
+  <update id="updateSecurityCodeById">
+    update smbus_user
+    set security_code = #{securityCode}
+    where id = #{id}
+  </update>
+
+  <select id="selectUserListByRoleLevel" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from smbus_user
+    where 1=1
+    <if test="levelValue != null">
+      <if test="levelValue == 0">
+
+      </if>
+      <if test="levelValue == 1">
+        and ORG_ID=(
+          select ORG_ID
+          from smbus_user
+          where
+            id=#{userId}
+        )
+      </if>
+      <if test="levelValue == 5">
+        and id=#{userId}
+      </if>
+    </if>
+  </select>
+
+  <select id="selectOrgMgrByUser" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from smbus_user
+    where
+      ID = (
+        select `user`.id
+        from smbus_user user
+        left join smbus_role role on role.id = user.role_id
+				left join smbus_org org on org.ID = `user`.ORG_ID
+        where role.name='组长'
+				and org.id = (
+					SELECT su.ORG_ID
+					from smbus_user su
+					where su.ID= #{userId}
+				)
+    )
+  </select>
+
+  <select id="selectUserListByOrgId" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from smbus_user
+    where ORG_ID=#{orgId}
+  </select>
+
+  <select id="selectUserListByRoleId" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from smbus_user
+    where ROLE_ID=#{roleId}
+  </select>
+</mapper>
